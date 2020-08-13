@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 排名</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">排名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+
+    <div class="mdui-table-fluid mdui-container">
+      <table class="mdui-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>用户</th>
+            <th>等级</th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+        </tbody>
+      </table>
+
+
+<script>
+  var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/getpaiming', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                data=JSON.parse(data);
+                console.log(data);
+                for(var i=1;i>=0;i++){
+                  if(data[String(i)]!=undefined)
+                  document.getElementById("tb").innerHTML+="<tr><td>"+String(i)+"</td><td>"+data[String(i)]['user']+"</td><td>"+data[String(i)]['level']+"</td></tr>"
+                  else
+                  break;
+                }
+            }
+        };
+</script>
+
+    <script>
+      var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest2.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest2.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest2.onreadystatechange = function () {
+            if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                var data = httpRequest2.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+
+        function gotozuoti(){
+          window.location.href="/problem/list?page=1";
+        }
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<br><br><br><br><br><br><br>
+</body>
+</html>

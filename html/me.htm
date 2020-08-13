@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>个人中心</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+    </head>
+<body class="mdui-theme-layout-auto" id="body">
+    <div class="mdui-appbar mdui-hoverable mdui-appbar-fixed">
+        <div class="mdui-toolbar mdui-color-indigo">
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+          <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+          <a href="/problem/list" class="mdui-typo-title">个人中心</a>
+          <div class="mdui-toolbar-spacer"></div>
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+          <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#color'}"><i class="mdui-icon material-icons">color_lens</i></a>
+          <ul class="mdui-menu" id="color">
+            <li class="mdui-menu-item">
+              <a href="javascript:light();" class="mdui-ripple" id="l">
+                <i class="mdui-icon material-icons">brightness_high</i>&nbsp;&nbsp;&nbsp;亮色
+              </a>
+            </li>
+            <li class="mdui-menu-item">
+              <a href="javascript:dark();" class="mdui-ripple" id="d">
+                <i class="mdui-icon material-icons">brightness_2</i>&nbsp;&nbsp;&nbsp;暗色
+              </a>
+            </li>
+            <li class="mdui-divider"></li>
+            <li class="mdui-menu-item">
+              <a href="javascript:auto();" class="mdui-ripple" id="a">
+                <i class="mdui-icon material-icons">brightness_4</i>&nbsp;&nbsp;&nbsp;自动
+              </a>
+            </li>
+          </ul>
+        
+        </div>
+      </div>
+<br><br><br><br>
+<script>
+function light(){
+document.getElementById('body').setAttribute('class','mdui-theme-layout-light');
+}
+function dark(){
+document.getElementById('body').setAttribute('class','mdui-theme-layout-dark');
+}
+function auto(){
+document.getElementById('body').setAttribute('class','mdui-theme-layout-auto');
+}
+</script>
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<br>
+<div class="mdui-card mdui-container mdui-hoverable">
+
+  <!-- 卡片头部，包含头像、标题、副标题 -->
+  <div class="mdui-card-header">
+    <img class="mdui-card-header-avatar" src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=188149577,2949073731&fm=26&gp=0.jpg"/>
+    <div class="mdui-card-header-title" id="name">Title</div>
+    <div class="mdui-card-header-subtitle" id="dengji">大佬</div>
+  </div>
+
+  <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+  
+    <!-- 卡片中可以包含一个或多个菜单按钮 -->
+    <div class="mdui-card-menu">
+      <button class="mdui-btn mdui-btn-icon mdui-text-color-white"><i class="mdui-icon material-icons">share</i></button>
+    </div>
+
+  <!-- 卡片的标题和副标题 -->
+  <div class="mdui-card-primary">
+    <b><div class="mdui-card-primary-title">个人中心</div></b>
+  </div>
+
+  <!-- 卡片的内容 -->
+  <div class="mdui-card-content">子曰：「学而时习之，不亦说乎？有朋自远方来，不亦乐乎？人不知，而不愠，不亦君子乎？」</div>
+
+  <div class="mdui-card-primary">
+    <div class="mdui-card-primary-title">我的积分</div>
+    &nbsp;&nbsp;&nbsp;
+    <b><div class="mdui-card-primary-subtitle" id="coins">0</div></b>
+  </div>
+
+  <div class="mdui-card-primary">
+    <div class="mdui-card-primary-title">我的等级</div>
+    &nbsp;&nbsp;&nbsp;
+    <b><div class="mdui-card-primary-subtitle" id="level">Lv.0</div></b>
+  </div>
+
+  <!-- 卡片的按钮 -->
+  <div class="mdui-card-actions">
+    <button class="mdui-btn mdui-ripple" onclick="settings()">设置</button>
+    <button class="mdui-btn mdui-btn-icon mdui-float-right"><i class="mdui-icon material-icons">expand_more</i></button>
+  </div>
+
+</div>
+<script>
+  function settings(){
+    mdui.prompt('暂无设置，请联系管理员',
+    function (value) {
+      mdui.alert('你输入了：' + value + '，点击了确认按钮');
+    },
+    function (value) {
+      mdui.alert('你输入了：' + value + '，点击了取消按钮');
+    }
+  );
+  }
+</script>
+<script>
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var json = httpRequest.responseText;//获取到json字符串，还需解析
+                document.getElementById('name').innerHTML=json
+            }
+        };
+      </script>
+      <script>
+        var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest2.open('GET', '/get_my_coins', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest2.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest2.onreadystatechange = function () {
+            if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                var json = httpRequest2.responseText;//获取到json字符串，还需解析
+                document.getElementById('coins').innerHTML=json
+            }
+        };
+      </script>
+      <script>
+        var httpRequest3 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest3.open('GET', '/get_my_level', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest3.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest3.onreadystatechange = function () {
+            if (httpReques3t.readyState == 4 && httpRequest3.status == 200) {
+                var json = httpRequest3.responseText;//获取到json字符串，还需解析
+                document.getElementById('level').innerHTML='Lv.'+json
+            }
+        };
+</script>
+</body>
+</html>

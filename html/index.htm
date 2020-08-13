@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 首页</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">首页&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+
+    <div class="mdui-card mdui-container">
+      <div class="mdui-card-media">
+        <img src="https://api.vvhan.com/api/bing"/>
+        <div class="mdui-card-media-covered">
+          <div class="mdui-card-primary">
+            <div class="mdui-card-primary-title">欢迎回来</div>
+            <span id="jinrishici-sentence" class="mdui-card-primary-subtitle">正在加载今日诗词....</span>
+<script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+          </div>
+          <div class="mdui-card-actions">
+            <button class="mdui-btn mdui-ripple mdui-ripple-white" onclick="gotozuoti()">去做题</button>
+          </div>
+        </div>
+      </div>
+    </div><br><br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<iframe class="mdui-container" src="http://www.xiaowenl.xyz/wyy/" width="750" height="300" frameborder="no" border="0"marginwidth="0" marginheight="0" scrolling="no"allowtransparency="yes"></iframe>
+    <br><br><br><br><br>
+    <div id="he-plugin-standard"></div>
+<script>
+WIDGET = {
+  CONFIG: {
+    "layout": 2,
+    "width": "230",
+    "height": "270",
+    "background": 1,
+    "dataColor": "FFFFFF",
+    "borderRadius": 5,
+    "key": "0Z7jba5dA7"
+  }
+}
+</script>
+<button class="mdui-fab mdui-fab-fixed mdui-btn-raised mdui-ripple mdui-color-pink" mdui-tooltip="{content: '【新】学习', position: 'top'}" onclick="location.href='/learn'"><i class="mdui-icon material-icons">book</i></button>
+<script src="https://apip.weatherdt.com/standard/static/js/weather-standard-common.js?v=2.0"></script>
+    <script>
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+
+        function gotozuoti(){
+          window.location.href="/problem/list?page=1";
+        }
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+
+<a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-btn-block" href="https://github.com/diyanqi/TastickOJ/">Powered By <b>TastickOJ</b></a>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 发帖</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">发帖</a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+
+    <div class="mdui-textfield mdui-textfield-floating-label mdui-container">
+        <label class="mdui-textfield-label">帖子标题</label>
+        <input class="mdui-textfield-input" type="text" id="title"/>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <select class="mdui-select mdui-container" mdui-select="{position: 'bottom'}" id="kind">
+        <option value="non">请选择帖子类型</option>
+        <option value="tiwen">提问</option>
+        <option value="jiaocheng">教程<br>（若同时发布题解,<br>请在标题里加上题目编号）</option>
+        <option value="guanshui">灌水</option>
+        <option value="zhanwu">站务</option>
+      </select>
+      <div class="mdui-textfield mdui-container">
+        <textarea class="mdui-textfield-input" rows="15" placeholder="帖子内容" id="info"></textarea>
+      </div>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="send()">确认发帖</button>
+
+<script>
+    function ggg(sHtml) {
+ return sHtml;
+ }
+    function send(){
+        var els = document.getElementsByTagName('TextArea');
+             for (var i = 0; i < els.length; i++) {
+                 els[i].innerHTML = els[i].value;
+             }
+        var title=ggg(document.getElementById("title").value);
+        var myselect=document.getElementById("kind");
+        var index=myselect.selectedIndex;
+        var kind=myselect.options[index].value;
+        var info=ggg(document.getElementById("info").innerHTML);
+        console.log(title,kind,info);
+        jd={'title':title,'kind':kind,'info':info};
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/newforum', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send(JSON.stringify(jd));//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                    if(data=='帖子太水')
+                    mdui.alert('帖子太水啦！')
+                    else{
+                    if (navigator.userAgent.indexOf('MSIE') > 0) { // close IE
+   if (navigator.userAgent.indexOf('MSIE 6.0') > 0) {
+      window.opener = null;
+      window.close();
+   } else {
+      window.open('', '_top');
+      window.top.close();
+   }
+} else { // close chrome;It is effective when it is only one.
+   window.opener = null;
+   window.open('', '_self');
+   window.close();
+}}
+                }
+            }
+        };
+    
+</script>
+
+
+    <script>
+      var httpRequest22 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest22.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest22.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest22.onreadystatechange = function () {
+            if (httpRequest22.readyState == 4 && httpRequest22.status == 200) {
+                var data = httpRequest22.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","javascript:;");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<br><br><br><br><br><br><br>
+</body>
+</html>

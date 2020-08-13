@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 讨论</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">讨论&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn mdui-btn-active"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<br>
+<ul class="mdui-list mdui-container" id="flists">
+  <!-- <a href="#" class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>题目</div></li> -->
+</ul>
+
+
+
+<script type="text/javascript">
+  UrlParam = function() { // url参数
+var data, index;    
+(function init() {    
+data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+index = {};   //键:索引，如{a:0,b:1,c:2}
+var u = window.location.search.substr(1);    
+if (u != '') {    
+  var params = decodeURIComponent(u).split('&');
+  for (var i = 0, len = params.length; i < len; i++) {
+    if (params[i] != '') {
+      var p = params[i].split("=");
+      if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+        data.push(['']);    
+        index[p[0]] = data.length - 1;    
+      } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+        continue;
+      } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+        data.push([p[1]]);    
+        index[p[0]] = data.length - 1;    
+      } else {// c=aaa    
+        data[index[p[0]]].push(p[1]);    
+      }    
+    }    
+  }    
+}    
+})();    
+return {    
+// 获得参数,类似request.getParameter()    
+param : function(o) { // o: 参数名或者参数次序
+  try {    
+    return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+  } catch (e) {    
+  }    
+},    
+//获得参数组, 类似request.getParameterValues()    
+paramValues : function(o) { //  o: 参数名或者参数次序
+  try {    
+    return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+  } catch (e) {}    
+},    
+//是否含有paramName参数
+hasParam : function(paramName) {
+  return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+},    
+// 获得参数Map ,类似request.getParameterMap()    
+paramMap : function() {
+  var map = {};    
+  try {    
+    for (var p in index) {  map[p] = data[index[p]];  }    
+  } catch (e) {}    
+  return map;    
+}    
+}    
+}();
+  </script>
+<script>
+  function just(){
+          var xhr = new XMLHttpRequest();//第一步：新建对象
+          xhr.open('GET', '/forums', true);//第二步：打开连接  将请求参数写在url中 
+          xhr.send();//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                  var res = xhr.responseText;//获取到json字符串，解析
+                  var info=JSON.parse(res);
+                  console.log(info);
+                  for(var i=info['numbers'];i>=1;i--){
+                    try{
+                        if(info[i]['kind']=='教程')
+                          document.getElementById('flists').innerHTML += "<a href='/forum?id="+i+"' class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>message</i><div class='mdui-list-item-content'>"+info[i]['title']+"<div class='mdui-typo'><p align='right'>板块:"+info[i]['kind']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户:'+info[i]['user']+"</p></div></div></a>";
+                    }catch{
+                      ;
+                    }finally{
+                      ;
+                    }
+                      }
+              }
+          };
+  }
+  </script>
+
+
+
+
+<script>
+    s=UrlParam.paramValues("s")[0];
+console.log(s);
+if(s==undefined){
+  just();
+}else{
+  var xhr = new XMLHttpRequest();//第一步：新建对象
+          xhr.open('GET', '/forums', true);//第二步：打开连接  将请求参数写在url中 
+          xhr.send();//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          xhr.onreadystatechange = function () {
+              if (xhr.readyState == 4 && xhr.status == 200) {
+                  var res = xhr.responseText;//获取到json字符串，解析
+                  var info=JSON.parse(res);
+                  console.log(info);
+                  for(var i=info['numbers'];i>=1;i--){
+                    try{
+                        if(info[i]['kind']=='教程'&&(info[i]['title'].search(String(s)) != -1))
+                          document.getElementById('flists').innerHTML += "<a href='/forum?id="+i+"' class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>message</i><div class='mdui-list-item-content'>"+info[i]['title']+"<div class='mdui-typo'><p align='right'>板块:"+info[i]['kind']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户:'+info[i]['user']+"</p></div></div></a>";
+                    }catch{
+                      ;
+                    }finally{
+                      ;
+                    }
+                      }
+              }
+          };
+}
+</script>
+
+
+
+    <script>
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                    window.location.href='/login';
+                }
+            }else{
+              return '失败！'
+            }
+        };
+
+        function gotozuoti(){
+          window.location.href="/problem/list?page=1";
+        }
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+
+
+<script>
+  function fabutiezi(){
+    window.open ("fatie", "newwindow", "height=666, width=666, top=50, left=450, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no")&nbsp;
+  }
+</script>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 文件上传</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">文件上传&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+    
+    <input type="file" id="selectFiles" accept=".in,.out" multiple="multiple" class="mdui-btn mdui-container"/>
+    <button class="save_button mdui-btn mdui-container" onclick="f_load_files()">确认上传</button>
+    <script type="text/javascript">
+        UrlParam = function() { // url参数
+    var data, index;    
+    (function init() {    
+      data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+      index = {};   //键:索引，如{a:0,b:1,c:2}
+      var u = window.location.search.substr(1);    
+      if (u != '') {    
+        var params = decodeURIComponent(u).split('&');
+        for (var i = 0, len = params.length; i < len; i++) {
+          if (params[i] != '') {
+            var p = params[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+              data.push(['']);    
+              index[p[0]] = data.length - 1;    
+            } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+              continue;
+            } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+              data.push([p[1]]);    
+              index[p[0]] = data.length - 1;    
+            } else {// c=aaa    
+              data[index[p[0]]].push(p[1]);    
+            }    
+          }    
+        }    
+      }    
+    })();    
+    return {    
+      // 获得参数,类似request.getParameter()    
+      param : function(o) { // o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+        } catch (e) {    
+        }    
+      },    
+      //获得参数组, 类似request.getParameterValues()    
+      paramValues : function(o) { //  o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+        } catch (e) {}    
+      },    
+      //是否含有paramName参数
+      hasParam : function(paramName) {
+        return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+      },    
+      // 获得参数Map ,类似request.getParameterMap()    
+      paramMap : function() {
+        var map = {};    
+        try {    
+          for (var p in index) {  map[p] = data[index[p]];  }    
+        } catch (e) {}    
+        return map;    
+      }    
+    }    
+  }();
+        </script>
+<script>
+files_content = [];
+
+//因为载入文件是异步操作，函数必须采用asyn/await解决
+async function f_load_files(){
+    var selectFiles = document.getElementById("selectFiles").files;
+    files_content ={};
+    var i=0;
+    for(var file of selectFiles)
+    {
+        i++;
+        const readFileAsync = file => new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = evt => resolve(evt.target.result)
+            reader.readAsText(file)
+          })
+
+            files_content[String(i)]={'name':file.name,'data':(await readFileAsync(file))};
+    }
+    files_content['num']=i;
+    files_content['id']=UrlParam.paramValues("id")[0];
+    console.log(files_content);
+    var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/uploaddata', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          httpRequest.send(JSON.stringify(files_content));//第三步：发送请求  将请求参数写在URL中
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  mdui.snackbar("上传成功",
+                  onclose=function(){
+                      window.opener = null;
+                      window.open('', '_self');
+                      window.close();
+                  });
+              }
+          };
+}
+var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest2.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest2.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest2.onreadystatechange = function () {
+            if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                var data = httpRequest2.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+</script>
+<br><br><br><br><br><br><br>
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+</body>
+</html>

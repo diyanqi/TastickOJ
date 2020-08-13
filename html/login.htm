@@ -1,0 +1,151 @@
+<!-- <form action="{{ url_for('app.handler') }}" method="GET">
+    用户名:<input type="text" name="username" ><br>
+    密码:<input type="password" name="password" ><br>
+    <input type="submit" value="登录"><br>
+</form> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>-登录-</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+<body id="body" class="mdui-theme-layout-auto">
+        <div class="mdui-appbar mdui-hoverable mdui-appbar-fixed">
+            <div class="mdui-toolbar mdui-color-indigo">
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+              <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+              <a href="/login" class="mdui-typo-title">登录</a>
+              <div class="mdui-toolbar-spacer"></div>
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#color'}"><i class="mdui-icon material-icons">color_lens</i></a>
+              <ul class="mdui-menu" id="color">
+                <li class="mdui-menu-item">
+                  <a href="javascript:light();" class="mdui-ripple" id="l">
+                    <i class="mdui-icon material-icons">brightness_high</i>&nbsp;&nbsp;&nbsp;亮色
+                  </a>
+                </li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:dark();" class="mdui-ripple" id="d">
+                    <i class="mdui-icon material-icons">brightness_2</i>&nbsp;&nbsp;&nbsp;暗色
+                  </a>
+                </li>
+                <li class="mdui-divider"></li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:auto();" class="mdui-ripple" id="a">
+                    <i class="mdui-icon material-icons">brightness_4</i>&nbsp;&nbsp;&nbsp;自动
+                  </a>
+                </li>
+              </ul>
+            
+            </div>
+          </div>
+<br><br><br><br>
+<script>
+  function light(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-light');
+  }
+  function dark(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-dark');
+  }
+  function auto(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-auto');
+  }
+</script>
+
+<div class="mdui-container">
+  <div class="mdui-row">
+    <div class="mdui-col-sm-6 mdui-col-md-5">
+      <div class="mdui-card mdui-card-actions-stacked">
+        <div class="mdui-card-media">
+          <img src="https://api.vvhan.com/api/bing"/>
+          <div class="mdui-card-media-covered mdui-card-media-covered-gradient">
+            <div class="mdui-card-primary">
+              <div class="mdui-card-primary-title">登录</div>
+              <div class="mdui-card-primary-subtitle">欢迎回来</div>
+            </div>
+          </div>
+        </div>
+        <div class="mdui-card-actions">
+            <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">用户名</label>
+                <input id="username" class="mdui-textfield-input" type="text" required/>
+                <div class="mdui-textfield-error">用户名不能为空</div>
+                <div class="mdui-textfield-helper">昵称，学号，ID皆可</div>
+              </div>
+              <div class="mdui-textfield mdui-textfield-floating-label">
+                <label class="mdui-textfield-label">密码</label>
+                <input id="password" class="mdui-textfield-input" type="password" pattern="^.*(?=.{6,})(?=.*[a-z])(?=.*[A-Z]).*$" required/>
+                <div class="mdui-textfield-error">密码至少 6 位，且包含大小写字母</div>
+                <div class="mdui-textfield-helper">请输入你的密码（至少 6 位，且包含大小写字母）</div>
+              </div><br><Br>
+          <button class="mdui-btn mdui-ripple mdui-btn-block" onclick="login()">登录！ &nbsp;&nbsp;&nbsp;</button><br>
+          <button class="mdui-btn mdui-ripple mdui-btn-block" onclick="zhuce()">没有账号？注册一个！ &nbsp;&nbsp;&nbsp;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function zhuce(){
+    mdui.prompt('用户名', '注册',
+  function (value) {
+    zhuceps(value)
+  },
+  function (value) {
+    ;
+  })
+  }
+function zhuceps(username){
+  mdui.prompt('密码', '注册',
+  function (value) {
+    zhucepost(username,value);
+  },
+  function (value) {
+    ;
+  }
+  )}
+  function zhucepost(username,password){
+    var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+            httpRequest.open('POST', '/zhuce', true); //第二步：打开连接
+            httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+            var data={'username':username,'password':password};
+            httpRequest.send(JSON.stringify(data));//发送请求 将情头体写在send中
+            httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                    var json = httpRequest.responseText;//获取到服务端返回的数据
+                    mdui.snackbar("请求成功，正在等待管理员审核")
+                }}
+  }
+    function login(){
+            var username=  document.getElementById("username").value;
+            var password=  document.getElementById("password").value;
+            console.log(username,password);
+            var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+            httpRequest.open('POST', 'tologin', true); //第二步：打开连接
+            httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+            var data={'username':username,'password':password};
+            httpRequest.send(JSON.stringify(data));//发送请求 将情头体写在send中
+            httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                    var json = httpRequest.responseText;//获取到服务端返回的数据
+                    if(json=='登陆失败'){
+                        mdui.dialog({title:'诶呀！',content:'登陆失败！\n请查看密码和用户名是否正确！',buttons: [{text:'OK'}],stackedButtons:false});
+                        return;
+                    }
+                    else{
+                        mdui.snackbar({
+                            message: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;登陆成功！ 2秒后自动跳转'
+                        });
+                        setTimeout( function(){window.location.href='/';}, 2 * 1000 );
+                    }
+        }}}
+</script>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+</body>
+</html>

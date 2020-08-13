@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>请稍后...</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+    </head>
+    <body class="mdui-theme-layout-auto" id="body">
+        <div class="mdui-appbar mdui-hoverable mdui-appbar-fixed">
+            <div class="mdui-toolbar mdui-color-indigo">
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+              <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+              <a href="/problem/list?page=1" class="mdui-typo-title">题库</a>
+              <div class="mdui-toolbar-spacer"></div>
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#color'}"><i class="mdui-icon material-icons">color_lens</i></a>
+              <ul class="mdui-menu" id="color">
+                <li class="mdui-menu-item">
+                  <a href="javascript:light();" class="mdui-ripple" id="l">
+                    <i class="mdui-icon material-icons">brightness_high</i>&nbsp;&nbsp;&nbsp;亮色
+                  </a>
+                </li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:dark();" class="mdui-ripple" id="d">
+                    <i class="mdui-icon material-icons">brightness_2</i>&nbsp;&nbsp;&nbsp;暗色
+                  </a>
+                </li>
+                <li class="mdui-divider"></li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:auto();" class="mdui-ripple" id="a">
+                    <i class="mdui-icon material-icons">brightness_4</i>&nbsp;&nbsp;&nbsp;自动
+                  </a>
+                </li>
+              </ul>
+            
+            </div>
+          </div>
+<br><br><br><br>
+<script>
+  function light(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-light');
+  }
+  function dark(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-dark');
+  }
+  function auto(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-auto');
+  }
+</script>
+
+
+<div class="mdui-container">
+  <div class="mdui-row">
+          <div class="mdui-card mdui-hoverable">
+            <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+            <div class="mdui-card-media">
+              <img src="/img/pro_img.jpg"/>
+
+              <!-- 卡片中可以包含一个或多个菜单按钮 -->
+              <div class="mdui-card-menu">
+                <button class="mdui-btn mdui-btn-icon mdui-text-color-white"><i class="mdui-icon material-icons">share</i></button>
+              </div>
+            </div>
+
+            <!-- 卡片的标题和副标题 -->
+            <div class="mdui-card-primary">
+              <font size="5px"><b><div class="mdui-card-primary-title" id="title">Title</div></b></font>
+              <div class="mdui-card-primary-subtitle" id="pro_id">Subtitle</div>
+            </div>
+
+            <!-- 卡片的内容 -->
+            <div class="mdui-card-content"><font size="4px" id="bg">啊哈！太好了！题目不存在或已被移除！</font></div>
+            <br>&nbsp; &nbsp; &nbsp;<b><font size='4px'>题目描述</font></b>
+            <div class="mdui-card-content"><font  id="des" size="5px">万岁~\(≧▽≦)/~ 可以少做一题啦~</font></div>
+            
+            <div class="mdui-card-content"><font size="4px">输入说明</div>
+              <div id="show" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+            
+            <div class=" mdui-container">
+               <pre><span class="mdui-card" id="inputs"><font>哈哈不见啦</font></span></pre>
+            </div>
+            <div class="mdui-card-content"><font size="4px">输出说明</div>
+              <div id="show2" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+              <div class=" mdui-container">
+                <pre><span class="mdui-card" id="outputs"><font>哈哈不见啦</font></span></pre>
+             </div>
+
+            <div class="mdui-card-content"><font size="4px">样例输入&nbsp;&nbsp;<span id="inputs_copy" data-clipboard-text="123"><button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" id="ic"><i class="mdui-icon material-icons">content_copy</i></button></span></div>
+              <div id="show" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+            
+              <div class="mdui-typo mdui-container mdui-hoverable">
+                <pre><span class="" id="sample_input">哈哈不见啦</span></pre></div>
+            <div class="mdui-card-content"><font size="4px">样例输出&nbsp;&nbsp;<span id="outputs_copy" data-clipboard-text="123"><button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" id="oc"><i class="mdui-icon material-icons">content_copy</i></button></span></div>
+              <div id="show2" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+            
+              <div class="mdui-typo mdui-container mdui-hoverable">
+                <pre><span class="" id="sample_output">no输出</span></pre>
+            </div>
+            <br><br>
+              <span class="mdui-chip-title" id="tip">TIP</span>
+
+            <!-- 卡片的按钮 -->
+            <div class="mdui-card-actions">
+              <a class="mdui-btn mdui-ripple" href="#code"><b>编辑代码</b></a>
+              <a class="mdui-btn mdui-ripple" onclick="tijie()"><b>查找题解</b></a>
+              <button class="mdui-btn mdui-btn-icon mdui-float-right"><i class="mdui-icon material-icons">expand_more</i></button>
+            </div>
+
+          </div>
+    </div></div><br>
+    <div class="mdui-textfield mdui-container mdui-card mdui-hoverable">
+      <p class="mdui-card-header-title"><b>编辑代码</b></p>
+      <textarea class="mdui-textfield-input mdui-container" rows="10" placeholder="在这复制或编辑代码……" id="code"></textarea>
+      <br><button type="submit" onclick="tijiao()" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accen" id="tjb">提交代码</button>
+    </div><br>
+    <div class="mdui-container mdui-card mdui-hoverable"><div class="mdui-card-header-title">
+      <br>
+      <b>测评点信息</b>
+    </div><br>
+    <div class="mdui-progress">
+      <div id="fenshu" class="mdui-progress-determinate" style="width: 0%;"></div>
+    </div>
+    <div class="mdui-card-content"><p id="chengji"><b>还未提交代码哪。。。</b></p></div>
+    <div class="mdui-table-fluid">
+      <table class="mdui-table mdui-table-hoverable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>状态</th>
+            <th>时间</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody id="tpinfo">
+        </tbody>
+      </table>
+    </div> <br>
+  </div>
+  <br><br><br><br><br><br>
+  <br><br><br><br><br><br>
+
+    <script src="https://cdn.bootcss.com/clipboard.js/1.7.1/clipboard.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      function escape2Html(str) {
+        var arrEntities={'lt':'<','gt':'>','nbsp':' ','amp':'&','quot':'"','<br>':'\n'};
+        return str.replace(/&(lt|gt|nbsp|amp|quot);/ig,function(all,t){
+          return arrEntities[t];
+        });
+      }
+      function tijie(){
+        window.open("/learn?s="+UrlParam.paramValues("id")[0])
+      }
+    </script>
+    <script async="async">
+      var btn=document.getElementById('inputs_copy');
+      var clipboard=new Clipboard(btn);
+      $('#ic').on('click', function () {
+  mdui.snackbar({
+    message: '成功拷贝样例输入',
+    position: 'left-bottom'
+  });
+});
+    </script>
+        <script>
+          var btn=document.getElementById('outputs_copy');
+          var clipboard=new Clipboard(btn);
+          $('#oc').on('click', function () {
+  mdui.snackbar({
+    message: '成功拷贝样例输出',
+    position: 'left-bottom'
+  });
+});
+        </script>
+        <script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+        <script type="text/javascript">
+        UrlParam = function() { // url参数
+    var data, index;    
+    (function init() {    
+      data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+      index = {};   //键:索引，如{a:0,b:1,c:2}
+      var u = window.location.search.substr(1);    
+      if (u != '') {    
+        var params = decodeURIComponent(u).split('&');
+        for (var i = 0, len = params.length; i < len; i++) {
+          if (params[i] != '') {
+            var p = params[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+              data.push(['']);    
+              index[p[0]] = data.length - 1;    
+            } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+              continue;
+            } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+              data.push([p[1]]);    
+              index[p[0]] = data.length - 1;    
+            } else {// c=aaa    
+              data[index[p[0]]].push(p[1]);    
+            }    
+          }    
+        }    
+      }    
+    })();    
+    return {    
+      // 获得参数,类似request.getParameter()    
+      param : function(o) { // o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+        } catch (e) {    
+        }    
+      },    
+      //获得参数组, 类似request.getParameterValues()    
+      paramValues : function(o) { //  o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+        } catch (e) {}    
+      },    
+      //是否含有paramName参数
+      hasParam : function(paramName) {
+        return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+      },    
+      // 获得参数Map ,类似request.getParameterMap()    
+      paramMap : function() {
+        var map = {};    
+        try {    
+          for (var p in index) {  map[p] = data[index[p]];  }    
+        } catch (e) {}    
+        return map;    
+      }    
+    }    
+  }();
+        </script>
+        <script>
+            var pro_id = UrlParam.paramValues("id");
+            var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+            httpRequest.open('POST', 'topics/', true); //第二步：打开连接
+            httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+            var data={'pro_id':pro_id[0]};
+            httpRequest.send(JSON.stringify(data));//发送请求 将情头体写在send中
+            /**
+             * 获取数据后的处理程序
+             */
+            httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                    var jjj = httpRequest.responseText;//获取到服务端返回的数据
+                    console.log(jjj,"123");
+                    var info = JSON.parse(jjj);
+                    document.title=info['title']
+                    console.log(info)
+                    document.getElementById('title').innerHTML = info['title'];
+                    document.getElementById('pro_id').innerHTML = 'P'+pro_id;
+                    document.getElementById('bg').innerHTML = info['bg'];
+                    document.getElementById('des').innerHTML = info['des'];
+                    document.getElementById('sample_input').innerHTML = info['sample_input'];
+                    document.getElementById('inputs').innerHTML = info['inputs'];
+                    document.getElementById('inputs_copy').setAttribute('data-clipboard-text',info['sample_input']);
+                    document.getElementById('sample_output').innerHTML = info['sample_output'];
+                    document.getElementById('outputs').innerHTML = info['outputs'];
+                    document.getElementById('outputs_copy').setAttribute('data-clipboard-text',info['sample_output']);
+                    document.getElementById('tip').innerHTML = info['tip'];
+                }
+            };
+        </script>
+        <script>
+            function decodeHtml(_str){
+                var s = _str.replace(/&#x[\dA-F]{2,4};/g, function(_hex){
+                    return String.fromCharCode('0' + _hex.slice(2, -1));
+                });
+                return s;
+            }
+            function tijiao(){
+              document.getElementById('tjb').setAttribute('disabled','disabled');
+              document.getElementById('tjb').innerHTML="正在测评……";
+              document.getElementById('tpinfo').innerHTML='';
+              var fenshu = document.getElementById("fenshu");
+              fenshu.setAttribute("class","mdui-progress-indeterminate");
+              document.getElementById('chengji').innerHTML = "<div class='mdui-spinner mdui-spinner-colorful'></div>";
+                var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+                httpRequest.open('POST', 'http://'+window.location.host+'/procodetest', true); //第二步：打开连接/***发送json格式文件必须设置请求头 ；如下 - */
+                httpRequest.setRequestHeader("Content-type","application/json");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）var obj = { name: 'zhansgan', age: 18 };
+                obj={"pro_id":UrlParam.paramValues("id")[0],"code":(document.getElementById('code').value),"code_type":"cpp"}
+                console.log(obj["code"])
+                httpRequest.send(JSON.stringify(obj));//发送请求 将json写入send中
+                httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                      fenshu.setAttribute("class","mdui-progress-determinate");
+                      fenshu.setAttribute("style","width: 0%;");
+                        var json = httpRequest.responseText;//获取到服务端返回的数据
+                        var info = JSON.parse(json)
+                        console.log(info)
+                        if(info['log']!='OK'){
+                          document.getElementById('chengji').innerHTML = '编译错误：<br>'+info['log'];
+                        }else{
+                          document.getElementById('chengji').innerHTML = '成绩：'+info['score']+'<br>测试点个数：'+info['testsnum'];
+                          for(var i=1;i<=parseInt(info['testsnum']);i++){
+                            
+                            var tp = info['testpoints'][String(i)];
+                            console.log(tp);
+                            if(tp['status']=='AC'){
+                              document.getElementById('tpinfo').innerHTML+='<tr><td>'+i+'</td><td>'+tp['status']+'</td><td>'+tp['time']+'s</td><td>'+'正确'+'</td></tr>';
+                            }else if(tp['status']=='WA'){
+                              document.getElementById('tpinfo').innerHTML+='<tr><td>'+i+'</td><td>'+tp['status']+'</td><td>'+tp['time']+'s</td><td>'+'答案错误<br>期望输出：'+tp['expected']+'<br>你的输出：'+tp['your_out']+'</td></tr>';
+                            }else if(tp['status']=='LTE'){
+                              document.getElementById('tpinfo').innerHTML+='<tr><td>'+i+'</td><td>'+tp['status']+'</td><td>'+tp['time']+'s</td><td>'+'超时<br>检查代码中的死循环或递归。'+'</td></tr>';
+                            }else if(tp['status']=='RE'){
+                              document.getElementById('tpinfo').innerHTML+='<tr><td>'+i+'</td><td>'+tp['status']+'</td><td>'+tp['time']+'s</td><td>'+'运行错误<br>检查代码中的数组越界、指针或访问了不该访问的文件。'+'</td></tr>';
+                            }
+                          }
+                          for(var i=0;i<=info['score'];i++){
+                            fenshu.setAttribute("style","width: "+String(i)+'%;');
+                          }
+                          if(info['score']==100){
+                            mdui.dialog({
+                              title: '恭喜你！通过了此题！',
+                              content: '100积分收入囊中~',
+                              buttons: [
+                                {
+                                  text: '前往个人中心查看',
+                                  onClick: function(inst){
+                                    var a = $("<a href='/me' target='_blank'>百度</a>").get(0);    
+                                    var e = document.createEvent('MouseEvents');  
+                                    e.initEvent('click', true, true);  
+                                    a.dispatchEvent(e);
+                                  }
+                                },
+                                {
+                                  text: '确认',
+                                }
+                              ]
+                            });
+                          }
+                        }
+                    }
+                    document.getElementById('tjb').innerHTML='提交代码';
+                    document.getElementById('tjb').removeAttribute('disabled');
+                };
+              }
+        </script>
+        <script>
+          var ttpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+            ttpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+            ttpRequest.send();//第三步：发送请求  将请求参数写在URL中
+            /**
+             * 获取数据后的处理程序
+             */
+            ttpRequest.onreadystatechange = function () {
+                if (ttpRequest.readyState == 4 && ttpRequest.status == 200) {
+                    var data = ttpRequest.responseText;//获取到json字符串，还需解析
+                    console.log(data);
+                    if(data=='NeedLogin'){
+                        window.location.href='/login';
+                    }
+                }else{
+                  return '失败！'
+                }
+            };
+    
+            function gotozuoti(){
+              window.location.href="/problem/list?page=1";
+            }
+        </script>
+    </body>
+</html>
+

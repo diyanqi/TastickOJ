@@ -1,0 +1,1 @@
+{"userids": 100002, "diyanqi": {"is_admin": true, "id": 100000, "password": "Zyq20071027", "coins": 10000, "level": 5, "qianming": "admin", "problems": {"1000": 100}}, "test": {"is_admin": false, "id": 100002, "password": "test", "coins": 0, "level": 0, "qianming": ".", "problems": {"1001": 100}}}

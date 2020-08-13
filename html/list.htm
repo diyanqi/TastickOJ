@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>题单广场</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+    </head>
+    <body class="mdui-theme-layout-auto" id="body">
+        <div class="mdui-appbar mdui-hoverable mdui-appbar-fixed">
+            <div class="mdui-toolbar mdui-color-indigo">
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">menu</i></a>
+              <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+              <a href="/problem/list" class="mdui-typo-title">题库</a>
+              <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+              <a href="javascript:;" class="mdui-btn mdui-btn-icon" mdui-menu="{target: '#color'}"><i class="mdui-icon material-icons">color_lens</i></a>
+              <ul class="mdui-menu" id="color">
+                <li class="mdui-menu-item">
+                  <a href="javascript:light();" class="mdui-ripple" id="l">
+                    <i class="mdui-icon material-icons">brightness_high</i>&nbsp;&nbsp;&nbsp;亮色
+                  </a>
+                </li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:dark();" class="mdui-ripple" id="d">
+                    <i class="mdui-icon material-icons">brightness_2</i>&nbsp;&nbsp;&nbsp;暗色
+                  </a>
+                </li>
+                <li class="mdui-divider"></li>
+                <li class="mdui-menu-item">
+                  <a href="javascript:auto();" class="mdui-ripple" id="a">
+                    <i class="mdui-icon material-icons">brightness_4</i>&nbsp;&nbsp;&nbsp;自动
+                  </a>
+                </li>
+              </ul>
+            
+            </div>
+          </div>
+<br><br><br><br>
+<script>
+  function light(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-light');
+  }
+  function dark(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-dark');
+  }
+  function auto(){
+    document.getElementById('body').setAttribute('class','mdui-theme-layout-auto');
+  }
+</script>
+<br>
+
+<div class="mdui-textfield mdui-textfield-expandable mdui-container">
+  <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">filter_tilt_shift</i></button>
+  <input class="mdui-textfield-input" type="text" placeholder="输入题目编号并跳转" onkeydown="keyup_submit2(event);" id='pid'/>
+  <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
+</div>
+
+<br>
+
+<div class="mdui-textfield mdui-textfield-expandable mdui-container">
+  <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>
+  <input class="mdui-textfield-input" type="text" placeholder="搜索题目名称，按回车进行搜索" onkeydown="keyup_submit(event);" id='msg'/>
+  <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
+</div>
+
+<ul class="mdui-list mdui-container" id="plists">
+    <!-- <a href="#" class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>题目</div></li> -->
+</ul>
+<script>
+  function send_message2(){
+    var id=document.getElementById('pid').value;
+    location.href='/problem?id='+String(id);
+  }
+  function send_message(){
+        var msg=document.getElementById('msg').value;
+        var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+        httpRequest.open('POST', '/search', true); //第二步：打开连接/***发送json格式文件必须设置请求头 ；如下 - */
+        httpRequest.setRequestHeader("Content-type","application/json");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）var obj = { name: 'zhansgan', age: 18 };
+        jsondata={'text':msg};
+        httpRequest.send(JSON.stringify(jsondata));//发送请求 将json写入send中
+        /**
+        * 获取数据后的处理程序
+        */
+        httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                var json = httpRequest.responseText;//获取到服务端返回的数据
+                console.log(json);
+                document.getElementById('plists').innerHTML = "<a class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>"+"未找到结果"+"</div></li>";
+                json=JSON.parse(json);
+                var flag=0;
+                document.getElementById("ddd").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' onclick='ret()'>返回</button>"
+                for(var i=1;i>0;i++){
+                        var ptitle=json[String(i)]['title'];
+                        console.log(ptitle);
+                        if(ptitle==undefined){
+                          break;
+                        }
+                        flag++;
+                        if(flag==1){
+                          document.getElementById('plists').innerHTML="";
+                        }
+                        var id=json[String(i)]['id'];
+                        console.log(id,ptitle);
+                        document.getElementById('plists').innerHTML += "<a href='/problem?id="+String(id)+"' class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>"+ptitle+"</div></li>";
+                    }
+                    }else{
+                      document.getElementById('plists').innerHTML = "<a class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>"+"共找到"+flag+"条结果"+"</div></li>";
+                // mdui.snackbar({
+                //   message: '搜索失败',
+                //   onClose: function(){
+                //     location.reload([true]);
+                //   }
+                // });
+            }
+        };
+    }
+    function keyup_submit(e){ 
+    var evt = window.event || e; 
+    if (evt.keyCode == 13){
+        send_message();
+    }
+    }
+    function keyup_submit2(e){ 
+    var evt = window.event || e; 
+    if (evt.keyCode == 13){
+        send_message2();
+    }
+    }
+</script>
+<script>
+  function ret(){
+    location.reload();
+  }
+    UrlParam = function() { // url参数
+    var data, index;    
+    (function init() {    
+      data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+      index = {};   //键:索引，如{a:0,b:1,c:2}
+      var u = window.location.search.substr(1);    
+      if (u != '') {    
+        var params = decodeURIComponent(u).split('&');
+        for (var i = 0, len = params.length; i < len; i++) {
+          if (params[i] != '') {
+            var p = params[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+              data.push(['']);    
+              index[p[0]] = data.length - 1;    
+            } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+              continue;
+            } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+              data.push([p[1]]);    
+              index[p[0]] = data.length - 1;    
+            } else {// c=aaa    
+              data[index[p[0]]].push(p[1]);    
+            }    
+          }    
+        }    
+      }    
+    })();    
+    return {    
+      // 获得参数,类似request.getParameter()    
+      param : function(o) { // o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+        } catch (e) {    
+        }    
+      },    
+      //获得参数组, 类似request.getParameterValues()    
+      paramValues : function(o) { //  o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+        } catch (e) {}    
+      },    
+      //是否含有paramName参数
+      hasParam : function(paramName) {
+        return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+      },    
+      // 获得参数Map ,类似request.getParameterMap()    
+      paramMap : function() {
+        var map = {};    
+        try {    
+          for (var p in index) {  map[p] = data[index[p]];  }    
+        } catch (e) {}    
+        return map;    
+      }    
+    }    
+  }();
+            var pro_id = UrlParam.paramValues("page");
+            var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+            httpRequest.open('POST', '/lists', true); //第二步：打开连接
+            httpRequest.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+            var data={'page':pro_id[0]};
+            httpRequest.send(JSON.stringify(data));//发送请求 将情头体写在send中
+            httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                    var json = httpRequest.responseText;//获取到服务端返回的数据
+                    var info = JSON.parse(json);
+                    var page=pro_id;
+                    var start_id=(page-1)*15+1000;
+                    var end_id=page*15+1000-1;
+                    console.log(info);
+                    for(var i=start_id;i<end_id;i++){
+                        var ptitle=info[(i)];
+                        if(ptitle=='NotFound'){
+                          continue;
+                        }
+                        document.getElementById('plists').innerHTML += "<a href='/problem?id="+String(i+(pro_id-1)*15)+"' class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>P"+String(i+(pro_id-1)*15)+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+ptitle+"</div></li>";
+                    }
+                }
+            };
+</script>
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="last_page()">上一页</button>
+<button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="next_page()">下一页</button>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ <div id="ddd"></div>
+<script>
+  function next_page(){
+    var page_id = UrlParam.paramValues("page");
+    location.href='/problem/list?page='+String(Number(page_id)+1);
+  }
+  function last_page(){
+    var page_id = UrlParam.paramValues("page");
+    if(page_id==1){
+      mdui.alert("已经是第一页啦！")
+    }else
+    location.href='/problem/list?page='+String(Number(page_id)-1);
+  }
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+    </body>
+</html>
+

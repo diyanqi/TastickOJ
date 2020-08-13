@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 后台管理</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">后台管理&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+
+
+    <div class="mdui-textfield mdui-textfield-floating-label mdui-container">
+      <label class="mdui-textfield-label">页码</label>
+      <input class="mdui-textfield-input" type="number" id="page" value="1"/>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="go()">进入</button>
+    </div>
+    <div class="mdui-table-fluid mdui-container">
+      <table class="mdui-table">
+        <thead>
+          <tr>
+            <th>题号</th>
+            <th>名称</th>
+            <th>备注</th>
+            <th>操作&nbsp;&nbsp;&nbsp;<button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="xinjian()">新建题目</button></th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+          <!-- <tr>
+            <td>Frozen yogurt</td>
+            <td>159</td>
+            <td>6.0</td>
+          </tr> -->
+        </tbody>
+      </table>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="last()">上一页</button>
+      <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="next()">下一页</button>
+    </div>
+
+    <script>
+      function last(){
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/bsproblems', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        var page=document.getElementById("page").value;
+        page=Number(page)-1;
+        document.getElementById("page").value=page;
+        var data={"page":page};
+        httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                data=JSON.parse(data);
+                console.log(data);
+                var startid=data['startid'],endid=data['endid'];
+                document.getElementById("tb").innerHTML='';
+                for(var i=startid;i<endid;i++){
+                  if(data[String(i)]!='NotFound')
+                  document.getElementById("tb").innerHTML+="<tr><td>"+String(i)+"</td><td>"+data[String(i)]+"</td><td>"+"无"+"</td><td><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='/bs/editproblem?id="+(i)+"'>修改</a><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='javascript:del("+i+");'>删除</a></td></tr>"}
+            }
+        };
+      }
+      function next(){
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/bsproblems', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        var page=document.getElementById("page").value;
+        page=Number(page)+1;
+        document.getElementById("page").value=page;
+        var data={"page":page};
+        httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                data=JSON.parse(data);
+                console.log(data);
+                var startid=data['startid'],endid=data['endid'];
+                document.getElementById("tb").innerHTML='';
+                for(var i=startid;i<endid;i++){
+                  if(data[String(i)]!='NotFound')
+                  document.getElementById("tb").innerHTML+="<tr><td>"+String(i)+"</td><td>"+data[String(i)]+"</td><td>"+"无"+"</td><td><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='/bs/editproblem?id="+(i)+"'>修改</a><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='javascript:del("+i+");'>删除</a></td></tr>" }
+            }
+        };
+      }
+      function go(){
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/bsproblems', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        var page=document.getElementById("page").value;
+        var data={"page":page};
+        httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                data=JSON.parse(data);
+                console.log(data);
+                var startid=data['startid'],endid=data['endid'];
+                document.getElementById("tb").innerHTML='';
+                for(var i=startid;i<endid;i++){
+                  if(data[String(i)]!='NotFound')
+                  document.getElementById("tb").innerHTML+="<tr><td>"+String(i)+"</td><td>"+data[String(i)]+"</td><td>"+"无"+"</td><td><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='/bs/editproblem?id="+(i)+"'>修改</a><a class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' href='javascript:del("+i+");'>删除</a></td></tr>"
+                }
+            }
+        };
+      }
+      go();
+    </script>
+
+<script>
+  function del(id){
+    mdui.confirm('确定删除P'+id+"？",
+      function(){
+        reallydel(id);
+      },
+      function(){
+        mdui.snackbar("取消成功");
+      }
+    );
+  }
+  function reallydel(id){
+    var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/del', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        var data={"id":id};
+        console.log(id);
+        httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                mdui.snackbar("成功删除");
+                location.reload();
+            }
+        };
+  }
+</script>
+
+
+    <script>
+      var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest2.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest2.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest2.onreadystatechange = function () {
+            if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                var data = httpRequest2.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<script>
+  function reallyxinjian(proid){
+    var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/xinjian', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        var data={"id":proid};
+        httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                location.href='/bs/editproblem?id='+String(proid);
+            }
+        };
+  }
+  function xinjian(){
+    mdui.prompt('请输入要新建的题目ID（即题目序号），若已存在直接跳转至此题目',
+    function (value) {
+      reallyxinjian(value);
+    },
+    function (value) {;
+    },
+    {
+      type: 'text'
+    }
+  );
+  }
+</script>
+<br><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-container">用户注册审核</button>
+<br>
+<div class="mdui-table-fluid mdui-container">
+  <table class="mdui-table">
+    <thead>
+      <tr>
+        <th>用户</th>
+        <th>操作</th>
+        </tr>
+    </thead>
+    <tbody id="zt">
+      <!-- <tr>
+        <td>Frozen yogurt</td>
+      </tr> -->
+    </tbody>
+  </table></div>
+
+
+<script>
+  var httpRequest3 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest3.open('GET', '/zhuceshenqing', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest3.send();//第三步：发送请求  将请求参数写在URL中
+        httpRequest3.onreadystatechange = function () {
+            if (httpRequest3.readyState == 4 && httpRequest3.status == 200) {
+                data=JSON.parse(httpRequest3.responseText);
+                console.log(data)
+                for(var i=1;i<=data['num'];i++){
+                  document.getElementById("zt").innerHTML+="<tr><td>"+data[String(i)]['username']+"</td><td><button class='mdui-btn' onclick=\"sendzhuce('"+data[String(i)]['username']+"','"+data[String(i)]['password']+"');\">通过</button></td></tr>";
+                  // console.log("<tr><td>"+data[String(i)]['username']+"</td><td><button class='mdui-btn' onclick='sendzhuce("+data[String(i)]['username']+","+data[String(i)]['password']+");'></button></td></tr>")
+                }
+            }
+        };
+</script>
+<script>
+  function sendzhuce(username,password){
+    var httpRequest3 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest3.open('POST', '/tongguozhuce', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        jd={'username':username,'password':password};
+        httpRequest3.send(JSON.stringify(jd));//第三步：发送请求  将请求参数写在URL中
+        httpRequest3.onreadystatechange = function () {
+            if (httpRequest3.readyState == 4 && httpRequest3.status == 200) {
+                // data=JSON.parse(httpRequest3.responseText);
+                // console.log(data)
+                location.reload();
+            }
+        };
+  }
+</script>
+
+<br><br><br><br><br><br><br>
+</body>
+</html>

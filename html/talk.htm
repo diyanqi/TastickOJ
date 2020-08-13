@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 讨论</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="/" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">讨论&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn mdui-btn-active"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    <a href="#fb" class="mdui-btn">点我转至聊天广场</a><br><br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-container" onclick="fabutiezi()">发布帖子</button>
+<br>
+<ul class="mdui-list mdui-container" id="flists">
+  <!-- <a href="#" class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>题目</div></li> -->
+</ul>
+<br><br><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-container" onclick="gotosend()" id="fb">发表信息</button>
+        
+    <div class="mdui-textfield mdui-textfield-floating-label mdui-container" id="edit">
+      </div>
+
+    <ul class="mdui-list mdui-container" id="tlists">
+        <!-- <a href="#" class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>book</i><div class='mdui-list-item-content'>题目</div></li> -->
+    </ul>
+<script>
+    var xhr2 = new XMLHttpRequest();//第一步：新建对象
+        xhr2.open('GET', '/talks', true);//第二步：打开连接  将请求参数写在url中 
+        xhr2.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        xhr2.onreadystatechange = function () {
+            if (xhr2.readyState == 4 && xhr2.status == 200) {
+                var res = xhr2.responseText;//获取到json字符串，解析
+                var info=JSON.parse(res);
+                console.log(info);
+                for(var i=1;i<=25;i++){
+                        var ptitle=info[(i)];
+                        if(ptitle==undefined){
+                            continue;
+                        }
+                        document.getElementById('tlists').innerHTML += "<li class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>message</i><div class='mdui-list-item-content'>"+ptitle+"</div></li>";
+                    }
+            }
+        };
+
+        var xhr = new XMLHttpRequest();//第一步：新建对象
+        xhr.open('GET', '/forums', true);//第二步：打开连接  将请求参数写在url中 
+        xhr.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var res = xhr.responseText;//获取到json字符串，解析
+                var info=JSON.parse(res);
+                console.log(info);
+                for(var i=info['numbers'];i>=1;i--){
+                  try{
+                    document.getElementById('flists').innerHTML += "<a href='/forum?id="+i+"' class='mdui-list-item mdui-ripple mdui-col-offset-md-2'><i class='mdui-icon mdui-list-item-icon material-icons'>message</i><div class='mdui-list-item-content'>"+info[i]['title']+"<div class='mdui-typo'><p align='right'>板块:"+info[i]['kind']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;用户:'+info[i]['user']+"</p></div></div></a>";
+                  }catch{
+                    ;
+                  }finally{
+                    ;
+                  }
+                    }
+            }
+        };
+</script>
+
+<script>
+    function html2Escape(sHtml) {
+ return sHtml.replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
+}
+    function gotosend(){
+        document.getElementById("edit").innerHTML="<label class='mdui-textfield-label'>编辑信息</label><input class='mdui-textfield-input' type='text' onkeydown='keyup_submit(event);' id='msg'/><button class='mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent' onclick='send_message()'>发表</button>"
+    }
+    function send_message(){
+        var msg=document.getElementById('msg').value;
+        var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+        httpRequest.open('POST', '/send_msg', true); //第二步：打开连接/***发送json格式文件必须设置请求头 ；如下 - */
+        httpRequest.setRequestHeader("Content-type","application/json");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）var obj = { name: 'zhansgan', age: 18 };
+        jsondata={'msg':html2Escape(msg)};
+        httpRequest.send(JSON.stringify(jsondata));//发送请求 将json写入send中
+        /**
+        * 获取数据后的处理程序
+        */
+        httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                var json = httpRequest.responseText;//获取到服务端返回的数据
+                console.log(json);
+                location.reload([true]);
+            }else{
+                mdui.snackbar({
+  message: '发送失败',
+  onClose: function(){
+    location.reload([true]);
+  }
+});
+
+            }
+        };
+    }
+    function keyup_submit(e){ 
+    var evt = window.event || e; 
+    if (evt.keyCode == 13){
+        send_message();
+    }
+    }
+</script>
+
+    <script>
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                    window.location.href='/login';
+                }
+            }else{
+              return '失败！'
+            }
+        };
+
+        function gotozuoti(){
+          window.location.href="/problem/list?page=1";
+        }
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+
+
+<script>
+  function fabutiezi(){
+    window.open ("fatie", "newwindow", "height=666, width=666, top=50, left=450, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no")&nbsp;
+  }
+</script>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

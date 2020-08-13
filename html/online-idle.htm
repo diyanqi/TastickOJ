@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 在线IDLE</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">在线IDLE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+    <div class="mdui-typo mdui-container">
+        <pre>
+            <textarea class="mdui-textfield-input" rows="15" placeholder="在这复制或编辑代码……" id="code"></textarea>
+        </pre>
+        <br><button type="submit" onclick="tijiao()" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accen" id="tjb">在线运行</button>
+    </div><br><br>
+    <div class="mdui-typo mdui-container">
+        <pre id="outputarea">提交后查看输出
+            </pre>
+         </div>
+
+<script>
+    function tijiao(){
+        mdui.prompt('请输入测试数据',
+        function (value) {
+            test(value);
+        },
+        function (value) {
+            return;
+        },
+        {
+            type: 'textarea'
+        }
+        );
+        function test(inputtext){
+            document.getElementById('tjb').setAttribute('disabled','disabled');
+              document.getElementById('tjb').innerHTML="正在运行……";
+                var httpRequest = new XMLHttpRequest();//第一步：创建需要的对象
+                httpRequest.open('POST', 'http://'+window.location.host+'/idle-test', true); //第二步：打开连接/***发送json格式文件必须设置请求头 ；如下 - */
+                httpRequest.setRequestHeader("Content-type","application/json");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）var obj = { name: 'zhansgan', age: 18 };
+                obj={"input":inputtext,"code":(document.getElementById('code').value),"code_type":"cpp"}
+                console.log(obj["code"])
+                httpRequest.send(JSON.stringify(obj));//发送请求 将json写入send中
+                httpRequest.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {//验证请求是否发送成功
+                        var jjj = httpRequest.responseText;//获取到服务端返回的数据
+                        console.log(jjj,"123");
+                        var info = JSON.parse(jjj);
+                        document.getElementById("outputarea").innerHTML=info['log'];
+                        // console.log()
+                    }
+                    document.getElementById('tjb').innerHTML='在线运行';
+                    document.getElementById('tjb').removeAttribute('disabled');
+                };
+              }
+    }
+</script>
+
+
+    <script>
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+
+        function gotozuoti(){
+          window.location.href="/problem/list?page=1";
+        }
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<br><br><br><br><br><br><br>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 题目编辑</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">题目编辑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>
+    <div class="mdui-container">
+      <div class="mdui-typo-display-1-opacity" id="iotag">快速导航</div><br>
+    <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" href="#iotag">样例输入/输出编辑</a>
+    <a class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" href="#ptag">题面编辑</a>
+    </div>
+  <br><br><br><br><br>
+<div class="mdui-container">
+  <div class="mdui-typo-display-1-opacity" id="iotag">样例输入/输出编辑</div><br>
+  <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="uploadfiles()">批量上传输入输出文件</button>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="addtiaomu()">新建条目并保存</button>
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="deltiaomu()">删除条目并保存</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="save()">保存修改的内容</button>
+</div><br>
+    <div class="mdui-table-fluid mdui-container">
+        <table class="mdui-table mdui-table-hoverable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>样例输入 .in</th>
+              <th>样例输出 .out</th>
+            </tr>
+          </thead>
+          <tbody id="tb">
+            <!-- <tr><td>1</td><td>Mark</td><td>Otto</td></tr> -->
+          </tbody>
+        </table>
+      </div>
+
+<script>
+  function uploadfiles(){
+    window.open ("/uploadiodata?id="+UrlParam.paramValues("id")[0]);
+  }
+</script>
+<br><br><br>
+      <div class="mdui-container">
+        <div class="mdui-typo-display-1-opacity" id="ptag">题面编辑</div><br>
+        <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="savepro()">保存修改的内容</button>
+        <div class="mdui-row"><br>
+                <div class="mdui-card mdui-hoverable">
+                  <!-- 卡片的媒体内容，可以包含图片、视频等媒体内容，以及标题、副标题 -->
+                  <div class="mdui-card-media">
+                    <img src="/img/pro_img.jpg"/>
+      
+                    <!-- 卡片中可以包含一个或多个菜单按钮 -->
+                    <div class="mdui-card-menu">
+                      <button class="mdui-btn mdui-btn-icon mdui-text-color-white"><i class="mdui-icon material-icons">share</i></button>
+                    </div>
+                  </div>
+      
+                  <!-- <div class="mdui-textfield"><textarea class="mdui-textfield-input" placeholder="Description">
+
+                    </textarea></div> -->
+
+                  <!-- 卡片的标题和副标题 -->
+                  <div class="mdui-card-primary">
+                    <font size="5px"><b><div class="mdui-card-primary-title mdui-textfield"><textarea class="mdui-textfield-input" id="title" placeholder="Description">Title</textarea></div></b></font>
+                    <div class="mdui-card-primary-subtitle" id="pro_id">Subtitle</div>
+                  </div>
+      
+                  <!-- 卡片的内容 -->
+                  <div class="mdui-card-content mdui-textfield"><textarea class="mdui-textfield-input" id="bg" placeholder="Description" size="4px">啊哈！太好了！题目不存在或已被移除！</textarea></div>
+                  <br>&nbsp; &nbsp; &nbsp;<b><font size='4px'>题目描述</font></b>
+                  <div class="mdui-card-content mdui-textfield"><textarea class="mdui-textfield-input" id="des" placeholder="Description" size="6px">万岁~\(≧▽≦)/~ 可以少做一题啦~</textarea></div>
+                  
+                  <div class="mdui-card-content"><font size="4px">输入说明</div>
+                    <div id="show" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+                  
+                  <div class=" mdui-container">
+                     <span class="mdui-card"><font><textarea class="mdui-textfield-input" id="inputs" placeholder="Description">哈哈不见啦</textarea></font></span>
+                  </div>
+                  <div class="mdui-card-content"><font size="4px">输出说明</div>
+                    <div id="show2" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+                    <div class=" mdui-container">
+                      <span class="mdui-card"><font><textarea class="mdui-textfield-input" id="outputs" placeholder="Description">哈哈不见啦</textarea></font></span>
+                   </div>
+      
+                  <div class="mdui-card-content"><font size="4px">样例输入&nbsp;&nbsp;<span id="inputs_copy" data-clipboard-text="123"><button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" id="ic"><i class="mdui-icon material-icons">content_copy</i></button></span></div>
+                    <div id="show" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+                  
+                    <div class="mdui-typo mdui-container mdui-hoverable">
+                      <pre><span class=""><textarea class="mdui-textfield-input" id="sample_input" placeholder="Description">哈哈不见啦</textarea></span></pre></div>
+                  <div class="mdui-card-content"><font size="4px">样例输出&nbsp;&nbsp;<span id="outputs_copy" data-clipboard-text="123"><button class="mdui-btn mdui-btn-icon mdui-color-theme-accent mdui-ripple" id="oc"><i class="mdui-icon material-icons">content_copy</i></button></span></div>
+                    <div id="show2" style="display: none;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;已复制<br><br></font></div>
+                  
+                    <div class="mdui-typo mdui-container mdui-hoverable">
+                      <pre><span class=""><textarea class="mdui-textfield-input" id="sample_output" placeholder="Description">no输出</textarea></span></pre>
+                  </div>
+                  <br><br>
+                    <span class="mdui-container mdui-card-subtitle"><textarea class="mdui-textfield-input mdui-container" id="tip" placeholder="Description">TIP</textarea></span>
+                    <br><br><br>
+</div>
+                    
+                    
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+      <script>
+        function save(){
+          var els = document.getElementsByTagName('TextArea');
+             for (var i = 0; i < els.length; i++) {
+                 els[i].innerHTML = els[i].value;
+             }
+          var jd={'num':window.num}
+          for(var i=1;i<=window.num;i++){
+            fin=document.getElementById(String(i)+'.in').value;
+            fout=document.getElementById(String(i)+'.out').value;
+            jd[String(i)+'.in']=fin;
+            jd[String(i)+'.out']=fout;
+          }
+          console.log(jd);
+          var pid = UrlParam.paramValues("id")[0];
+          var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/saveiodata', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          data={"iodata":jd,"proid":pid};
+          httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  mdui.snackbar("保存成功");
+                  location.reload();
+              }
+          };
+        }
+          function reallydeltiaomu(ioid){
+          var pid = UrlParam.paramValues("id")[0];
+          var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/deliodata', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          data={"ioid":ioid,"proid":pid};
+          httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  mdui.snackbar("删除成功");
+                  location.reload(true);
+              }
+          };
+          }
+          function deltiaomu(){
+            mdui.prompt('请输入要删除的条目序号',
+            function (value) {
+                reallydeltiaomu(Number(value));
+            },
+            function (value) {
+                ;
+            }
+            );
+          }
+
+
+
+          function reallyaddtiaomu(input,output){
+          var pid = UrlParam.paramValues("id")[0];
+          var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/addiodata', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          data={"input":input,"proid":pid,"output":output};
+          httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  mdui.snackbar("添加成功");
+                  location.reload(true);
+              }
+          };
+          }
+          function addtiaomu(){
+              var input,output;
+            mdui.prompt('无法取消，取消请至填到样例输出时取消','请输入测试输入',
+            function (value) {
+                input=value;
+            },
+            function (value) {;
+            },
+            {
+              type: 'textarea'
+            }
+            );
+            mdui.prompt('若取消请点Cancel','请输入测试输出',
+            function (value) {
+                output=value;
+                reallyaddtiaomu(input,output);
+            },
+            function (value) {
+                ;
+            },
+            {
+              type: 'textarea'
+            }
+            );
+            
+          }
+      </script>
+
+
+
+
+      <script type="text/javascript">
+        UrlParam = function() { // url参数
+    var data, index;    
+    (function init() {    
+      data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+      index = {};   //键:索引，如{a:0,b:1,c:2}
+      var u = window.location.search.substr(1);    
+      if (u != '') {    
+        var params = decodeURIComponent(u).split('&');
+        for (var i = 0, len = params.length; i < len; i++) {
+          if (params[i] != '') {
+            var p = params[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+              data.push(['']);    
+              index[p[0]] = data.length - 1;    
+            } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+              continue;
+            } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+              data.push([p[1]]);    
+              index[p[0]] = data.length - 1;    
+            } else {// c=aaa    
+              data[index[p[0]]].push(p[1]);    
+            }    
+          }    
+        }    
+      }    
+    })();    
+    return {    
+      // 获得参数,类似request.getParameter()    
+      param : function(o) { // o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+        } catch (e) {    
+        }    
+      },    
+      //获得参数组, 类似request.getParameterValues()    
+      paramValues : function(o) { //  o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+        } catch (e) {}    
+      },    
+      //是否含有paramName参数
+      hasParam : function(paramName) {
+        return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+      },    
+      // 获得参数Map ,类似request.getParameterMap()    
+      paramMap : function() {
+        var map = {};    
+        try {    
+          for (var p in index) {  map[p] = data[index[p]];  }    
+        } catch (e) {}    
+        return map;    
+      }    
+    }    
+  }();
+        </script>
+
+
+      <script>
+          document.getElementById("tb").innerHTML=''
+          var pid = UrlParam.paramValues("id")[0];
+          var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/getproio', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          data={"id":pid};
+          httpRequest.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  var data = httpRequest.responseText;//获取到json字符串，还需解析
+                  data=JSON.parse(data);
+                  console.log(data);
+                  window.num=Number(data['cnt']);
+                  for(var i=1;i<=data['cnt'];i++){
+                    document.getElementById("tb").innerHTML+="<tr><td>"+i+"</td><td><div class='mdui-textfield'><label class='mdui-textfield-label'>"+i+".in</label><textarea class='mdui-textfield-input' id='"+String(i)+'.in'+"'>"+data[String(i)+'.in']+"</textarea></div></td><td><div class='mdui-textfield'><label class='mdui-textfield-label'>"+i+".out</label><textarea class='mdui-textfield-input' id='"+String(i)+'.out'+"'>"+data[String(i)+'.out']+"</textarea></td></tr></div>";
+                  }
+              }
+          };
+      </script>
+
+    <script>
+      var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest2.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest2.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest2.onreadystatechange = function () {
+            if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                var data = httpRequest2.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+
+<script>
+  var pro_id = UrlParam.paramValues("id");
+  var httpRequest2 = new XMLHttpRequest();//第一步：创建需要的对象
+  httpRequest2.open('POST', '/topics/', true); //第二步：打开连接
+  httpRequest2.setRequestHeader("Content-type","application/x-www-form-urlencoded");//设置请求头 注：post方式必须设置请求头（在建立连接后设置请求头）
+  var data={'pro_id':pro_id[0]};
+  httpRequest2.send(JSON.stringify(data));//发送请求 将情头体写在send中
+  httpRequest2.onreadystatechange = function () {//请求后的回调接口，可将请求成功后要执行的程序写在其中
+      if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {//验证请求是否发送成功
+          var jjj = httpRequest2.responseText;//获取到服务端返回的数据
+          console.log(jjj);
+          var ainfo = JSON.parse(jjj);
+          console.log(ainfo)
+          document.getElementById('title').innerHTML = ainfo['title'];
+          document.getElementById('pro_id').innerHTML = 'P'+pro_id;
+          document.getElementById('bg').innerHTML = ainfo['bg'];
+          document.getElementById('des').innerHTML = ainfo['des'];
+          document.getElementById('sample_input').innerHTML = ainfo['sample_input'];
+          document.getElementById('inputs').innerHTML = ainfo['inputs'];
+          document.getElementById('inputs_copy').setAttribute('data-clipboard-text',ainfo['sample_input']);
+          document.getElementById('sample_output').innerHTML = ainfo['sample_output'];
+          document.getElementById('outputs').innerHTML = ainfo['outputs'];
+          document.getElementById('outputs_copy').setAttribute('data-clipboard-text',ainfo['sample_output']);
+          document.getElementById('tip').innerHTML = ainfo['tip'];
+      }
+  };
+</script>
+
+
+<script>
+  function savepro(){
+    var ainfo={'proid':pid};
+    var els = document.getElementsByTagName('TextArea');
+             for (var i = 0; i < els.length; i++) {
+                 els[i].innerHTML = els[i].value;
+             }
+          ainfo['title']=document.getElementById('title').innerHTML;
+          ainfo['bg']=document.getElementById('bg').innerHTML;
+          ainfo['des']=document.getElementById('des').innerHTML;
+          ainfo['sample_input']=document.getElementById('sample_input').innerHTML;
+          ainfo['inputs']=document.getElementById('inputs').innerHTML;
+          ainfo['sample_output']=document.getElementById('sample_output').innerHTML;
+          innerHTML = ainfo['outputs']=document.getElementById('outputs').innerHTML;
+          ainfo['tip']=document.getElementById('tip').innerHTML;
+          
+          console.log(ainfo);
+          var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+          httpRequest.open('POST', '/savepro', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+          httpRequest.send(JSON.stringify(ainfo));//第三步：发送请求  将请求参数写在URL中
+          /**
+           * 获取数据后的处理程序
+           */
+          httpRequest.onreadystatechange = function () {
+              if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                  mdui.snackbar("保存成功");
+                  location.reload();
+              }
+          };
+  }
+</script>
+
+
+<br><br><br><br><br><br><br>
+</body>
+</html>

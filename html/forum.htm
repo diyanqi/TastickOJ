@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Tastick OJ - 帖子</title>
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/css/mdui.min.css"/>
+</head>
+  <body class="mdui-theme-layout-auto">
+    <div class="mdui-appbar mdui-container-fluid">
+      <div class="mdui-toolbar mdui-color-theme">
+        <a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple"><i class="mdui-icon material-icons">menu</i></a>
+        <a href="javascript:;" class="mdui-typo-headline">Tastick OJ</a>
+        <a href="javascript:;" class="mdui-typo-title">帖子&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</a>
+        <a href="/help" class="mdui-btn"><b>帮助</b></a>
+        <a href="/problem/list?page=1" class="mdui-btn"><b>题库</b></a>
+        <a href="/talk" class="mdui-btn"><b>讨论</b></a>
+        <a href="/tools" class="mdui-btn"><b>更多工具</b></a>
+        <div class="mdui-toolbar-spacer"></div>
+        <a href="/login" class="mdui-btn" id="denglu">登录</a>
+      </div>
+    </div><br><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="mdui-btn mdui-ripple" onclick="mdui.snackbar('举报成功')"><b>举报该帖子</b></a>
+    <a class="mdui-btn mdui-ripple" onclick="del()"><b>(管理员)删除该帖子</b></a>
+
+<br><br>
+    <div class="mdui-container">
+      <div class="mdui-row">
+              <div class="mdui-card mdui-hoverable">
+    
+                <!-- 卡片的标题和副标题 -->
+                <div class="mdui-card-primary">
+                  <font size="5px"><b><div class="mdui-card-primary-title" id="title">Title</div></b></font>
+                  <div class="mdui-card-primary-subtitle" id="pro_id">Subtitle</div>
+                </div>
+    
+                <!-- 卡片的内容 -->
+                <div class="mdui-card-content">
+                  <div class="mdui-typo">
+                    <pre>
+                  <font size="5px" id="bg">啊这……帖子不见了……</font>
+                    </pre></div></div>
+                <div class="mdui-card-actions">
+                  <a class="mdui-btn mdui-ripple" href="#rep"><b>回复</b></a>
+                  <button class="mdui-btn mdui-btn-icon mdui-float-right"><i class="mdui-icon material-icons">expand_more</i></button>
+                </div>
+    
+              </div>
+        </div></div><br><br><br>
+        <div id="rpl"></div>
+        <br><br><br>
+        <div class="mdui-container" id="rep">
+          <div class="mdui-row">
+                  <div class="mdui-card mdui-hoverable">
+                    <br>
+                    <div class="mdui-textfield mdui-textfield-floating-label mdui-container">
+                      <label class="mdui-textfield-label">回复信息</label>
+                      <textarea class="mdui-textfield-input" id='ta'></textarea>
+                    </div>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" onclick="reply()">确认回复</button>
+                    <br><br>
+                  </div>
+            </div></div>
+
+
+    <script type="text/javascript">
+        UrlParam = function() { // url参数
+    var data, index;    
+    (function init() {    
+      data = [];    //值，如[["1","2"],["zhangsan"],["lisi"]]
+      index = {};   //键:索引，如{a:0,b:1,c:2}
+      var u = window.location.search.substr(1);    
+      if (u != '') {    
+        var params = decodeURIComponent(u).split('&');
+        for (var i = 0, len = params.length; i < len; i++) {
+          if (params[i] != '') {
+            var p = params[i].split("=");
+            if (p.length == 1 || (p.length == 2 && p[1] == '')) {// p | p= | =
+              data.push(['']);    
+              index[p[0]] = data.length - 1;    
+            } else if (typeof(p[0]) == 'undefined' || p[0] == '') { // =c 舍弃
+              continue;
+            } else if (typeof(index[p[0]]) == 'undefined') { // c=aaa    
+              data.push([p[1]]);    
+              index[p[0]] = data.length - 1;    
+            } else {// c=aaa    
+              data[index[p[0]]].push(p[1]);    
+            }    
+          }    
+        }    
+      }    
+    })();    
+    return {    
+      // 获得参数,类似request.getParameter()    
+      param : function(o) { // o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o][0] : data[index[o]][0]);    
+        } catch (e) {    
+        }    
+      },    
+      //获得参数组, 类似request.getParameterValues()    
+      paramValues : function(o) { //  o: 参数名或者参数次序
+        try {    
+          return (typeof(o) == 'number' ? data[o] : data[index[o]]);    
+        } catch (e) {}    
+      },    
+      //是否含有paramName参数
+      hasParam : function(paramName) {
+        return typeof(paramName) == 'string' ? typeof(index[paramName]) != 'undefined' : false;
+      },    
+      // 获得参数Map ,类似request.getParameterMap()    
+      paramMap : function() {
+        var map = {};    
+        try {    
+          for (var p in index) {  map[p] = data[index[p]];  }    
+        } catch (e) {}    
+        return map;    
+      }    
+    }    
+  }();
+        </script>
+        <script>
+          function del(){
+            mdui.dialog({
+            title: '确认删除该帖子吗？',
+            content: '此操作不可撤销！',
+            buttons: [
+              {
+                text: '取消'
+              },
+              {
+                text: '确认',
+                onClick: function(inst){
+                  rd();
+                }
+              }
+            ]
+          });
+          }
+          function rd(){
+            var fid = UrlParam.paramValues("id")[0];
+            jd={'id':fid};
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/delforum', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send(JSON.stringify(jd));//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                    location.reload();
+                }
+                }
+            }
+          function ggg(sHtml) {
+ return sHtml.replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
+}
+          function reply(){
+            var fid = UrlParam.paramValues("id")[0];
+            var els = document.getElementsByTagName('TextArea');
+             for (var i = 0; i < els.length; i++) {
+                 els[i].innerHTML = els[i].value;
+             }
+        var ta=ggg(document.getElementById("ta").value);
+        jd={'ta':ta,'id':fid};
+        var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('POST', '/replyforum', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send(JSON.stringify(jd));//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                    location.reload();
+                }
+                }
+            }
+        </script>
+        <script>
+            var fid = UrlParam.paramValues("id")[0];
+            var httpRequest2 = new XMLHttpRequest();//第一步：建立所需的对象
+            httpRequest2.open('POST', '/getforuminfo', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+            data={"id":fid};
+            httpRequest2.send(JSON.stringify(data));//第三步：发送请求  将请求参数写在URL中
+            /**
+             * 获取数据后的处理程序
+             */
+
+
+
+            //  <div class='mdui-container'><div class='mdui-row'><div class='mdui-card mdui-hoverable'><div class='mdui-card-primary'><font size='5px'><b><div class='mdui-card-primary-title' id='title'>Title</div></b></font><div class='mdui-card-primary-subtitle' id='pro_id'>Subtitle</div></div><div class='mdui-card-content'><font size='5px' id='bg'>啊哈！太好了！题目不存在或已被移除！</font></div><div class='mdui-card-actions'><a class='mdui-btn mdui-ripple' href='#rep'><b>回复</b></a>                  <button class='mdui-btn mdui-btn-icon mdui-float-right'><i class='mdui-icon material-icons'>expand_more</i></button></div></div></div></div><br><br><br>
+
+
+            httpRequest2.onreadystatechange = function () {
+                if (httpRequest2.readyState == 4 && httpRequest2.status == 200) {
+                    var data = httpRequest2.responseText;//获取到json字符串，还需解析
+                    data=JSON.parse(data);
+                    console.log(data);
+                    document.getElementById("title").innerHTML=data['title'];
+                    document.getElementById('pro_id').innerHTML='楼主 '+data['user']+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;板块 '+data['kind'];
+                    document.getElementById('bg').innerHTML=data['info'];
+                    var r=data['replies'];
+                    var rnum=r['num'];
+                    for(var i=1;i<=rnum;i++){
+                      document.getElementById("rpl").innerHTML+="<div class='mdui-container'><div class='mdui-row'><div class='mdui-card mdui-hoverable'><div class='mdui-card-primary'><font size='5px'><b><div class='mdui-card-primary-subtitle' id='title'>"+r[String(i)]['user']+"</div></b></font><div class='mdui-card-primary-title' id='pro_id'>"+r[String(i)]['info']+"</div></div></div></div></div><br>"
+                    }
+                }
+            };
+        </script>
+
+    <script>
+      var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+        httpRequest.open('GET', '/whatsmyname', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+        httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+        /**
+         * 获取数据后的处理程序
+         */
+        httpRequest.onreadystatechange = function () {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var data = httpRequest.responseText;//获取到json字符串，还需解析
+                console.log(data);
+                if(data!='NeedLogin'){
+                  document.getElementById('denglu').innerHTML=data;
+                  document.getElementById('denglu').setAttribute("href","/me");
+                }else{
+                  mdui.snackbar({
+  message: '请先登录（右上角）'
+});
+                }
+            }else{
+              return '失败！'
+            }
+        };
+    </script>
+  
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.0/dist/js/mdui.min.js"></script>
+<br><br><br><br><br><br><br>
+</body>
+</html>
