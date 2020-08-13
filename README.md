@@ -1,7 +1,7 @@
 # TastickOJ
 基于python的轻量OJ——'全新界面'为做题带来不一样的体验！
 
-### ~~小声BB:小学生爆肝100+小时开发水作很不容易的！~~
+### ~~小声BB:小学生爆肝100+小时开发水作很不容易的！~~ [StarIt!]
 
 ### Linux-Ubuntu 安装方案  
 -这里以Ubuntu20.04LTS（WSL）为例。
@@ -172,6 +172,9 @@ ifconfig
 inet 192.168.9.11
 ```
 - 的内容。依次尝试其中的IP地址+:8080的端口。总有一个是可以用的。
+
+# IMPORTANT   defualtAdminUsername:admin         Password:admin
+
 5. 后期开发与配置
 - TastickOJ采用Mozilla2.0协议。
 - 当服务器被访问资源时，您会在控制台看到相应的信息。
