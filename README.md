@@ -1,6 +1,7 @@
 # TastickOJ
 基于python的轻量OJ——'全新界面'为做题带来不一样的体验！
 
+### ~~小声BB:小学生爆肝100+小时开发水作很不容易的！~~
 
 ### Linux-Ubuntu 安装方案  
 -这里以Ubuntu20.04LTS（WSL）为例。
