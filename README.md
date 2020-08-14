@@ -5,6 +5,7 @@
 
 ### Linux-Ubuntu 安装方案  
 ##### - 视频教程：https://www.bilibili.com/video/bv1vp4y1q7ce 同时也诠释了下文为什么难以使用80端口。（可以使用nginx端口转发） 
+##### - 一键安装并运行： https://github.com/diyanqi/TastickOJ-Installer
 -这里以Ubuntu20.04LTS（WSL）为例。
 1. 您首先应当更换国内源，保证接下来的下载数据能100%可靠。
   - 更换apt-get源。请自行百度，因为不同的系统会有不同的操作。
